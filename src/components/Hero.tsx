@@ -54,7 +54,7 @@ const Hero = ({ onGetQuote }: HeroProps) => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="text-lg px-8 py-4 h-auto border-white text-white hover:bg-white hover:text-[hsl(var(--brand-navy))]"
+                className="text-lg px-8 py-4 h-auto border-white text-white hover:#1f1969 text-[hsl(var(--brand-navy))]"
               >
                 Learn More
               </Button>

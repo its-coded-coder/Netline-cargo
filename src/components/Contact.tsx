@@ -160,7 +160,7 @@ const Contact = ({ onGetQuote }: ContactProps) => {
             <Button 
               variant="outline" 
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-[hsl(var(--brand-navy))]"
+              className="border-white text-white hover:#1f1969 text-[hsl(var(--brand-navy))]"
             >
               Call: +254799 999 964
             </Button>
