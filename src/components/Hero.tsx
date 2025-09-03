@@ -28,18 +28,18 @@ const Hero = ({ onGetQuote }: HeroProps) => {
                 INTERNATIONAL LOGISTICS SOLUTIONS
               </p>
               
-              {/* 3D Card Effect for Main Heading */}
+              {/* 3D Card Effect for Hero SVG */}
               <div className="card-3d-parent">
                 <div className="card-3d">
                   <div className="card-3d-glass"></div>
                   <div className="card-3d-content">
-                    <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                      CONNECTING
-                      <br />
-                      <span className="text-[hsl(var(--brand-orange))]">CHINA AND DUBAI TO KENYA,</span>
-                      <br />
-                      ONE SHIPMENT AT A TIME
-                    </h1>
+                    <div className="w-full max-w-4xl">
+                      <img 
+                        src="/hero.svg" 
+                        alt="Connecting China and Dubai to Kenya, one shipment at a time"
+                        className="w-full h-auto max-h-64 md:max-h-80 lg:max-h-96 object-contain"
+                      />
+                    </div>
                   </div>
                   
                   {/* Decorative circles */}
@@ -174,6 +174,9 @@ const Hero = ({ onGetQuote }: HeroProps) => {
           transform: translate3d(0, 0, 26px);
           position: relative;
           z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .card-3d-logo {
@@ -278,7 +281,7 @@ const Hero = ({ onGetQuote }: HeroProps) => {
           }
           
           .card-3d-content {
-            padding: 30px 20px;
+            padding: 20px 15px;
           }
           
           .card-3d-circle1 { width: 80px; }
