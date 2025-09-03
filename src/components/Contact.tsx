@@ -16,7 +16,6 @@ const Contact = ({ onGetQuote }: ContactProps) => {
         { name: "Abdinoor", phone: "0729 540 555" },
         { name: "Feisal", phone: "0722 638 006" },
         { name: "Sharif", phone: "0795 689 000" },
-        { name: "Abshir", phone: "0705 366 537" },
       ],
       mainPhone: "+254799 999 964 / +254799 999 965",
       email: "netlinedxb2014@gmail.com"
