@@ -30,7 +30,7 @@ const Hero = ({ onGetQuote }: HeroProps) => {
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                 CONNECTING
                 <br />
-                <span className="text-[hsl(var(--brand-orange))]">CHINA TO KENYA,</span>
+                <span className="text-[hsl(var(--brand-orange))]">CHINA AND DUBAI TO KENYA,</span>
                 <br />
                 ONE SHIPMENT AT A TIME
               </h1>
@@ -38,7 +38,7 @@ const Hero = ({ onGetQuote }: HeroProps) => {
             
             <p className="text-xl text-gray-200 max-w-2xl leading-relaxed">
               Your trusted partner in international logistics. From Guangzhou to Nairobi, 
-              from Shenzhen to Mombasa — we deliver with speed, safety, and reliability.
+              from Shenzhen to Mombasa, Dubai to Kenya — we deliver with speed, safety, and reliability.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">

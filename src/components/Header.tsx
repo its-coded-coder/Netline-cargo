@@ -25,7 +25,7 @@ const Header = ({ onGetQuote }: HeaderProps) => {
             </div>
           </div>
           <div className="text-[hsl(var(--brand-orange))] font-medium">
-            Connecting China to Kenya, One Shipment at a Time
+            Connecting Kenya to the World
           </div>
         </div>
 
