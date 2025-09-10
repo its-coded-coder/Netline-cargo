@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ interface QuoteModalProps {
 
 const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,10 +30,9 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
     description: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
     if (!formData.name || !formData.email || !formData.phone || !formData.serviceType) {
       toast({
         title: "Missing Information",
@@ -42,27 +42,52 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
       return;
     }
 
-    toast({
-      title: "Quote Request Submitted!",
-      description: "We'll get back to you within 24 hours with a detailed quote.",
-    });
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch("/api/quotes", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-      origin: "",
-      destination: "",
-      serviceType: "",
-      cargoType: "",
-      weight: "",
-      dimensions: "",
-      description: "",
-    });
+      const result = await response.json();
 
-    onOpenChange(false);
+      if (result.success) {
+        toast({
+          title: "Quote Request Submitted!",
+          description: `Your request #${result.quoteId} has been received. We'll get back to you within 24 hours.`,
+        });
+
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          origin: "",
+          destination: "",
+          serviceType: "",
+          cargoType: "",
+          weight: "",
+          dimensions: "",
+          description: "",
+        });
+
+        onOpenChange(false);
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Please try again later or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -76,13 +101,12 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
           <DialogTitle className="text-2xl font-bold text-[hsl(var(--brand-navy))]">
             Request a Quote
           </DialogTitle>
-          <p className="text-muted-foreground">
+          <DialogDescription>
             Get a competitive quote for your China-Kenya logistics needs
-          </p>
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personal Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name *</Label>
@@ -92,6 +116,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="Your full name"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -101,6 +126,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                 value={formData.company}
                 onChange={(e) => handleInputChange("company", e.target.value)}
                 placeholder="Company name (optional)"
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -115,6 +141,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 placeholder="your@email.com"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="space-y-2">
@@ -125,11 +152,11 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                 onChange={(e) => handleInputChange("phone", e.target.value)}
                 placeholder="+254 xxx xxx xxx"
                 required
+                disabled={isSubmitting}
               />
             </div>
           </div>
 
-          {/* Shipping Information */}
           <div className="border-t pt-6">
             <h3 className="text-lg font-semibold text-[hsl(var(--brand-navy))] mb-4">
               Shipping Details
@@ -143,6 +170,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                   value={formData.origin}
                   onChange={(e) => handleInputChange("origin", e.target.value)}
                   placeholder="e.g., Guangzhou, Shenzhen"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="space-y-2">
@@ -152,13 +180,18 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                   value={formData.destination}
                   onChange={(e) => handleInputChange("destination", e.target.value)}
                   placeholder="e.g., Nairobi, Mombasa"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
 
             <div className="space-y-2 mb-4">
               <Label htmlFor="serviceType">Service Type *</Label>
-              <Select value={formData.serviceType} onValueChange={(value) => handleInputChange("serviceType", value)}>
+              <Select 
+                value={formData.serviceType} 
+                onValueChange={(value) => handleInputChange("serviceType", value)}
+                disabled={isSubmitting}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select shipping method" />
                 </SelectTrigger>
@@ -199,6 +232,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                   value={formData.cargoType}
                   onChange={(e) => handleInputChange("cargoType", e.target.value)}
                   placeholder="e.g., Electronics, Textiles"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="space-y-2">
@@ -208,6 +242,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                   value={formData.weight}
                   onChange={(e) => handleInputChange("weight", e.target.value)}
                   placeholder="Total weight"
+                  disabled={isSubmitting}
                 />
               </div>
               <div className="space-y-2">
@@ -217,6 +252,7 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                   value={formData.dimensions}
                   onChange={(e) => handleInputChange("dimensions", e.target.value)}
                   placeholder="L x W x H"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -229,16 +265,17 @@ const QuoteModal = ({ open, onOpenChange }: QuoteModalProps) => {
                 onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Any special requirements, packaging needs, or additional information..."
                 rows={3}
+                disabled={isSubmitting}
               />
             </div>
           </div>
 
           <div className="flex gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
-            <Button type="submit" variant="hero" className="flex-1">
-              Submit Quote Request
+            <Button type="submit" variant="hero" className="flex-1" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit Quote Request"}
             </Button>
           </div>
         </form>
